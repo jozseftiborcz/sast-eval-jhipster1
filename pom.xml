@@ -103,6 +103,11 @@
     </dependencyManagement>
 
     <dependencies>
+      <dependency>
+          <groupId>ognl</groupId>
+          <artifactId>ognl</artifactId>
+          <version>3.2.15</version>
+      </dependency>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>

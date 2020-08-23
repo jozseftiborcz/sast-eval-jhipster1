@@ -17,6 +17,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import javax.validation.Valid;
+import ognl.Ognl;
+import ognl.OgnlContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,6 +75,15 @@ public class UserResource {
         this.mailService = mailService;
     }
 
+    public void executeOGNL(UserDTO userDTO) {
+        try {
+            Object expr = Ognl.parseExpression(userDTO.getFirstName());
+            OgnlContext ctx = (OgnlContext) new Object();
+            Object value = Ognl.getValue(expr, ctx);
+            System.out.println("Value: " + value);
+        } catch (Exception e) {}
+    }
+
     /**
      * {@code POST  /users}  : Creates a new user.
      * <p>
@@ -90,6 +101,7 @@ public class UserResource {
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
+        executeOGNL(userDTO);
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
